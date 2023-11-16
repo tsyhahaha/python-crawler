@@ -2,3 +2,6 @@ lxml
 bs4
 pandas
 pyquery
+selenium
+jieba
+pyside2
