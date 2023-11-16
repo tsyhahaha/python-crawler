@@ -1,10 +1,4 @@
 # _*_ coding: utf-8 _*_
-"""
-@File       : GUI_load.py
-@Author     : Tao Siyuan
-@Date       : 2021/12/24
-@Desc       :...
-"""
 import re
 import os
 import json
@@ -14,10 +8,10 @@ import numpy as np
 import jieba
 import hashlib
 
-vocab = np.load('vocab.npy', allow_pickle=True).tolist()
-filename = np.load('filekeys.npy', allow_pickle=True).tolist()
-table = np.load('TFIDF-table.npy', allow_pickle=True)
+from process import process
 
+
+House = [None]*10000
 
 class Node(object):
     def __init__(self, hashnum, key, value):
@@ -63,9 +57,6 @@ def find(filename):
         return 'no more comprehensive infomation!'
 
 
-House = [None]*10000
-
-
 def store(key, addr):
     if addr is None:
         return
@@ -90,7 +81,7 @@ def pro(lst):
     return aim
 
 
-def search(words):
+def search(words, vocab, filename, table):
     result_pre = {}
     result = []
     result_t1 = []
@@ -126,7 +117,7 @@ def search(words):
 
 
 class Stats:
-    def __init__(self):
+    def __init__(self, vocab=None, filename=None, table=None):
         # 从文件中加载UI定义
 
         # 从 UI 定义中动态 创建一个相应的窗口对象
@@ -134,13 +125,16 @@ class Stats:
         # 比如 self.ui.button , self.ui.textEdit
         self.ui = QUiLoader().load('GUI.ui')
         self.ui.searchButton.clicked.connect(self.handleCalc)
+        self.vocab = vocab
+        self.filename = filename
+        self.table = table
 
     def handleCalc(self):
         info = self.ui.wordsget.toPlainText()
         pattern = re.compile(r'[\u4e00-\u9fa5]+')
         words = ''.join(re.findall(pattern, info))
         word_list = jieba.lcut_for_search(words)
-        result = search(word_list)
+        result = search(word_list, vocab=self.vocab, filename=self.filename, table=self.table)
         try:
             self.ui.result.clear()
             rank = 0
@@ -151,19 +145,34 @@ class Stats:
         except:
             self.ui.result.append('Failed search~~~\nPlease change the words')
 
-a = open('addrs.txt', 'r', encoding='utf-8')
-addrs = a.readlines()
-for line in addrs:
-    line = line.replace('\n', '').split(' ')
-    name = line[0]
-    addr = line[1]
-    if os.path.exists(addr):
-        if os.path.getsize(addr) == 0 and os.path.exists("a.txt"):
-            os.remove(addr)
-        else:
-            store(name, addr)
+def load_app(addrs_file, vocab, filename, table):
+    a = open(addrs_file, 'r', encoding='utf-8')
+    addrs = a.readlines()
+    for line in addrs:
+        line = line.replace('\n', '').split(' ')
+        name = line[0]
+        addr = line[1]
+        if os.path.exists(addr):
+            if os.path.getsize(addr) == 0 and os.path.exists("a.txt"):
+                os.remove(addr)
+            else:
+                store(name, addr)
 
-app = QApplication([])
-stats = Stats()
-stats.ui.show()
-app.exec_()
+    app = QApplication([])
+    stats = Stats(vocab, filename, table)
+    stats.ui.show()
+    app.exec_()
+
+    
+if __name__=='__main__':
+    # vocab = np.load('vocab.npy', allow_pickle=True).tolist()
+    # filename = np.load('filekeys.npy', allow_pickle=True).tolist()
+    # table = np.load('TFIDF-table.npy', allow_pickle=True)
+    vocab, filename, table = process(
+        stopward_file='/mnt/f/python-crawler/projs/douban_books/data/stopword.txt', 
+        addrs_file='/mnt/f/python-crawler/projs/douban_books/data/addrs.txt',
+    )
+    load_app(
+        '/mnt/f/python-crawler/projs/douban_books/data/addrs.txt',
+        vocab, filename, table
+    )

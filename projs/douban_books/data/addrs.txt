@@ -1,0 +1,8 @@
+巴别塔 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/巴别塔.json
+她对此感到厌烦 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/她对此感到厌烦.json
+一句顶一万句 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/一句顶一万句.json
+在小山和小山之间 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/在小山和小山之间.json
+克莱因壶 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/克莱因壶.json
+双月城的惨剧 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/双月城的惨剧.json
+爱，鸡尾酒与生化危机 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/爱，鸡尾酒与生化危机.json
+献给阿尔吉侬的花束 /mnt/f/python-crawler/projs/douban_books/data/douban_books/文学/小说/献给阿尔吉侬的花束.json
